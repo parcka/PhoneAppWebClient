@@ -22,8 +22,8 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock x:Name="ApplicationTitle" Text="Servicios Web usando WebClient" Style="{StaticResource PhoneTextNormalStyle}"/>
-            <TextBlock x:Name="PageTitle" Text="DDAM" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock x:Name="ApplicationTitle" Text="Servicio de Login" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock x:Name="PageTitle" Text="RMB Project" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -34,9 +34,14 @@
             <PasswordBox Height="73" HorizontalAlignment="Left" Margin="100,107,0,0" Name="txtClave" Password="" VerticalAlignment="Top" Visibility="Visible" Width="336" />
             <Button Content="Buscar" Height="72" HorizontalAlignment="Left" Margin="33,194,0,0" Name="botonBusqueda" VerticalAlignment="Top" Width="160" Click="botonBusqueda_Click" Visibility="Visible" />
             <Button Content="Limpiar" Height="72" HorizontalAlignment="Left" Margin="219,194,0,0" Name="botonLimpiar" VerticalAlignment="Top" Width="160" Click="botonLimpiar_Click" Visibility="Visible" />
+            <Button Content="Eliminar Usuario de BD (Test)" Height="72" HorizontalAlignment="Left" Margin="33,384,0,0" Name="botonEliminar" VerticalAlignment="Top" Width="404" Click="botonEliminar_Click" />
+            <CheckBox Content="Recordar Usuario"  Height="72" HorizontalAlignment="Left" Name="checkRecordar"  Visibility="Visible"/>    
+       
         </Grid>
-    </Grid>
+   
+    </Grid>   
  
+
     <!--Sample code showing usage of ApplicationBar-->
     <!--<phone:PhoneApplicationPage.ApplicationBar>
         <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">

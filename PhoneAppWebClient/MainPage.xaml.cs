@@ -16,6 +16,13 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Xml.Serialization;
 using System.Text;
+//librerías para BD
+using System.Data.Linq;
+using System.Data.Linq.Mapping;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Text;
+
 
 namespace PhoneAppWebClient
 {
@@ -30,10 +37,97 @@ namespace PhoneAppWebClient
         //Método que maneja el evento del botón búsqueda
         public void botonBusqueda_Click(object sender, RoutedEventArgs e)
         {
+            
+
+            crearBD_Click();
+            Usuarios userExist = buscarUser_Click();
+            if (userExist != null)
+            {
+                //me muevo a la otra pantalla
+                NavigationService.Navigate(new Uri("/Verusuario.xaml?usuario=" + userExist.Usuario + "&clave=" + userExist.Clave + "&nivel=" + userExist.Nivel + "&checkRecordar=" + "null", UriKind.Relative));
+            }
+            else 
+            { 
+                //busco en en web service los datos
+                buscarUsuario();
+
+            }
             /* Descomente BuscarUsuario() cuando desee usar WebClient  y comente a: buscarUsuario(); */
             //BuscarUsuario();
             /* Descomente buscarUsuario() cuando desee usar HttpWebRequest  y comente a: BuscarUsuario(); */
-            buscarUsuario();
+           
+        }
+
+
+        //Método que maneja el evento Click del botón: botonEliminar un Usuario
+        private void botonEliminar_Click(object sender, RoutedEventArgs e)
+        {
+            //Realiza al conexión con la Base de datos: UsuariosDB.sdf con una instancia de la clase: UsuariosDataContext
+            using (UsuariosDataContext Usuariosdb = new UsuariosDataContext(UsuariosDataContext.ConnectionString))
+            {
+                try
+                {
+                    //Se realiza el query por el Usuario, equivale a: Select * from Usuarios Where Usuario=txtUsuario.Text; 
+                    IQueryable<Usuarios> UsuariosQuery = from Usuarios in Usuariosdb.Usuarios where Usuarios.Usuario == txtUsuario.Text select Usuarios;
+                    //Obtiene la primera incedencia de la consulta
+                    Usuarios objUsuarios = UsuariosQuery.FirstOrDefault();
+                    //Obtenido la primera incidencia o referencia al objeto a eliminar, se elimina de la tabla.
+                    //Equivale a: Delete from Usuarios Where Usuario=txtUsuario.Text; 
+                    Usuariosdb.Usuarios.DeleteOnSubmit(objUsuarios);
+                    //Se realiza un Commit a la tabla de la base de datos.
+                    Usuariosdb.SubmitChanges();
+                    MessageBox.Show("Usuario Eliminado.");
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show("No puede eliminar, porque la base de datos no se ha creado, o el error es: " + error);
+                }
+            }
+        }
+
+        private Usuarios buscarUser_Click()
+        {
+            //Realiza al conexión con la Base de datos: UsuariosDB.sdf con una instancia de la clase: UsuariosDataContext
+            using (UsuariosDataContext Usuariosdb = new UsuariosDataContext(UsuariosDataContext.ConnectionString))
+            {
+                try
+                {
+                    //Se realiza el query por el Usuario, equivale a: Select * from Usuarios Where Usuario=txtUsuario.Text; 
+                    IQueryable<Usuarios> UsuariosQuery = from Usuarios in Usuariosdb.Usuarios where Usuarios.Usuario == txtUsuario.Text select Usuarios;
+                    //Obtiene la primera incedencia de la consulta
+                    Usuarios objUsuarios = UsuariosQuery.FirstOrDefault();
+                    if (objUsuarios != null)
+                    {
+                        MessageBox.Show("Usuario Encontrado en la BD.");
+                        return objUsuarios;
+                    }
+                   
+                }
+                catch (Exception error)
+                {
+                    MessageBox.Show("No se pudo buscar el usuaior, error: " + error);
+                }
+            }
+
+            return null;
+        }
+
+        private void crearBD_Click()
+        {
+            //Realiza al conexión con la Base de datos: UsuariosDB.sdf con una instancia de la clase: UsuariosDataContext
+            using (UsuariosDataContext Usuariosdb = new UsuariosDataContext(UsuariosDataContext.ConnectionString))
+            {
+                //Si no existe la base de datos la creará
+                if (Usuariosdb.DatabaseExists() == false)
+                {
+                    Usuariosdb.CreateDatabase();
+                    MessageBox.Show("Creada la base de datos UsuariosDB.sdf");
+                }
+                else
+                {
+                    //MessageBox.Show("La base de datos UsuariosDB.sdf ya existe");
+                }
+            }
         }
 
         //Método que maneja el btón Limpiar y reiniciamos los parámetros y visibilidad en la pantalla.
@@ -47,47 +141,11 @@ namespace PhoneAppWebClient
          * Usando WebClient
          */
 
-        //Método: BuscarUsuario() que usa WebClient 
-        private void BuscarUsuario()
-        {
-            string url = "http://192.168.1.100/servidor-restful/Despachador.php?servicio=1&usuario="+ txtUsuario.Text + "&clave=" + txtClave.Password;
-            var uri = new Uri(url);
-            //Crea un objeto: cliente de la clase: WebClient dada el uri o url
-            var cliente = new WebClient();
-            //Si es recibida totalmente la tira Json comenzará su ejecución las instrucciones despues del indicador: =>
-            cliente.DownloadStringCompleted += (sender, e) =>
-            {
-                //Obtiene la tira Json del Microservicio
-                var tiraJson = e.Result;
-                Dispatcher.BeginInvoke(() =>
-                {
-                    //Se instancia la clase Usuarios para asignarle la tira Json a cada atributo de la clase Usuarios a través de: DataContractJsonSerializer
-                    Usuarios objusuarios = new Usuarios();
-                    MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(System.Net.HttpUtility.UrlDecode(tiraJson)));
-                    DataContractJsonSerializer ser = new DataContractJsonSerializer(objusuarios.GetType());
-                    objusuarios = ser.ReadObject(ms) as Usuarios;
-                    //Validamos si encontró al usuario a través del atributo: exito
-                    if (objusuarios.exito.CompareTo("1")==0)
-                    {
-                        //Llamamos a otra página xaml llamada: Verusuario.xaml, pasando los parámetros: usuario, clave y nivel 
-                        NavigationService.Navigate(new Uri("/Verusuario.xaml?usuario=" + objusuarios.usuario + "&clave=" + objusuarios.clave + "&nivel=" + objusuarios.nivel, UriKind.Relative));
-                        
-                    }
-                    else
-                    {
-                        MessageBox.Show("No existe el usuario.");
-                    }
-                });
-            };
-            /*
-             * Se dispara la descarga o llamada asincrónicamente del uri o url. 
-             * Si es completado o llega la tira Json se disparará el método: DownloadStringCompleted
-             */
-            cliente.DownloadStringAsync(uri);
-        }
-        /*
-         * Fin del Uso WebClient
-         */
+  
+
+
+
+
 
         /*****************************************************************************************************/
 
@@ -117,15 +175,15 @@ namespace PhoneAppWebClient
                 Dispatcher.BeginInvoke(() =>
                 {
                     //Se instancia la clase Usuarios para asignarle la tira Json a cada atributo de la clase Usuarios a través de: DataContractJsonSerializer
-                    Usuarios objusuarios = new Usuarios();
+                    UsuariosWS objusuarios = new UsuariosWS();
                     MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(tiraJson));
                     DataContractJsonSerializer serializar = new DataContractJsonSerializer(objusuarios.GetType());
-                    objusuarios = serializar.ReadObject(ms) as Usuarios;
+                    objusuarios = serializar.ReadObject(ms) as UsuariosWS;
                     //Validamos si encontró al usuario a través del atributo: exito
                     if (objusuarios.exito.CompareTo("1") == 0)
                     {
                         //Llamamos a otra página xaml llamada: Verusuario.xaml, pasando los parámetros: usuario, clave y nivel 
-                        NavigationService.Navigate(new Uri("/Verusuario.xaml?usuario=" + objusuarios.usuario + "&clave=" + objusuarios.clave + "&nivel=" + objusuarios.nivel, UriKind.Relative));
+                        NavigationService.Navigate(new Uri("/Verusuario.xaml?usuario=" + objusuarios.usuario + "&clave=" + objusuarios.clave + "&nivel=" + objusuarios.nivel + "&checkRecordar=" + checkRecordar.IsChecked, UriKind.Relative));
                     }
                     else
                     {
@@ -142,7 +200,7 @@ namespace PhoneAppWebClient
     /*
      * Clase Usuarios que se necesita para La deserialización del objeto enviado por el Responde del micro servicio.
      */
-    public class Usuarios
+    public class UsuariosWS
     {
         public string exito { get; set; }
         public string usuario { get; set; }

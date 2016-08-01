@@ -24,3 +24,16 @@ C:\Users\XTR100\DIPLOMADO UCLA\WINDOWS PHONE\sesion04\sesion04\ejemplos\practica
 C:\Users\XTR100\DIPLOMADO UCLA\WINDOWS PHONE\sesion04\sesion04\ejemplos\practica04\PhoneAppWebClient\PhoneAppWebClient\obj\Debug\PhoneAppWebClient.dll
 C:\Users\XTR100\DIPLOMADO UCLA\WINDOWS PHONE\sesion04\sesion04\ejemplos\practica04\PhoneAppWebClient\PhoneAppWebClient\obj\Debug\PhoneAppWebClient.pdb
 C:\Users\XTR100\DIPLOMADO UCLA\WINDOWS PHONE\sesion04\sesion04\ejemplos\practica04\PhoneAppWebClient\PhoneAppWebClient\obj\Debug\XapCacheFile.xml
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\obj\Debug\App.g.i.cs
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\obj\Debug\MainPage.g.i.cs
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\obj\Debug\Verusuario.g.i.cs
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\obj\Debug\PhoneAppWebClient.g.resources
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\obj\Debug\PhoneAppWebClient.dll
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\obj\Debug\PhoneAppWebClient.pdb
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\Bin\Debug\ApplicationIcon.png
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\Bin\Debug\Background.png
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\Bin\Debug\PhoneAppWebClient.dll
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\Bin\Debug\PhoneAppWebClient.pdb
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\Bin\Debug\AppManifest.xaml
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\Bin\Debug\PhoneAppWebClient.xap
+C:\Users\XTR100\PROYECTOS JAVA\PhoneAppWebClient\PhoneAppWebClient\obj\Debug\XapCacheFile.xml
